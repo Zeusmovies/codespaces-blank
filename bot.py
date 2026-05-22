@@ -56,6 +56,7 @@ async def dreamxbotz_start():
             print("DreamxBotz Imported => " + plugin_name)
     if ON_HEROKU:
        # asyncio.create_task(ping_server()) 
+        pass
     b_users, b_chats = await db.get_banned()
     temp.BANNED_USERS = b_users
     temp.BANNED_CHATS = b_chats
