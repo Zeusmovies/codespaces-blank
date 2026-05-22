@@ -224,7 +224,13 @@ Nᴀᴍᴇ : {}
 
 Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """<b><a href="https://t.me/D_W_T_1">{file_name}</a></b>\n\n<b>⚜️ Powered By : <a href="https://t.me/D_W_T_1">[ DOWNTOWNVILLA ]</a></b>"""
+    CAPTION = """
+<b>@D_W_T_1 {file_name}</b>
+
+<b>💾 File Size :</b> {file_size}
+
+⚡ <b>JOIN US :</b> <a href='https://t.me/D_W_T_1'>DOWNTOWN VILLA</a>
+"""
 
     
     MOVIE_UPDATE_NOTIFY_TXT = """
