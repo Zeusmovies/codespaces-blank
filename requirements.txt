@@ -39,3 +39,4 @@ Levenshtein==0.24.0
 
 # Git-based Packages
 git+https://github.com/Joelkb/cinemagoer
+flask
