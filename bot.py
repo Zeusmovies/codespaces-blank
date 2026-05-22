@@ -85,7 +85,7 @@ async def dreamxbotz_start():
     await app.setup()
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, int(PORT)).start()
-    dreamxbotz.loop.create_task(keep_alive())
+    #dreamxbotz.loop.create_task(keep_alive())
     await idle()
     
 if __name__ == '__main__':
