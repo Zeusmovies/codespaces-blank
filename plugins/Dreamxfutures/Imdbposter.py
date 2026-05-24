@@ -135,66 +135,113 @@ async def get_movie_details(query, id=False, file=None):
         return None
 
 async def get_movie_detailsx(query, id=False, file=None):
-    base_url = "https://bharath-boy-api.vercel.app/api/movie-posters"
-    q = str(query).strip()
+
     try:
+        api_key = TMDB_API_KEY
+
         async with aiohttp.ClientSession() as session:
-            params = {"query": q, "api_key": TMDB_API_KEY}
-            async with session.get(base_url, params=params) as resp:
+
+            # SEARCH MOVIE
+            search_url = "https://api.themoviedb.org/3/search/movie"
+
+            params = {
+                "api_key": api_key,
+                "query": str(query).strip()
+            }
+
+            async with session.get(search_url, params=params) as resp:
+
                 if resp.status != 200:
-                    text = await resp.text()
-                    logger.error(f"API request failed [{resp.status}] for query={q}\n {text}")
-                    return await resp.json()
-                
+                    logger.error(f"TMDB Search Failed: {resp.status}")
+                    return None
+
                 data = await resp.json()
+
+            results = data.get("results")
+
+            if not results:
+                logger.error("No TMDB results found")
+                return None
+
+            movie = results[0]
+
+            movie_id = movie.get("id")
+
+            # DETAILS API
+            details_url = f"https://api.themoviedb.org/3/movie/{movie_id}"
+
+            details_params = {
+                "api_key": api_key,
+                "append_to_response": "credits"
+            }
+
+            async with session.get(details_url, params=details_params) as detail_resp:
+
+                if detail_resp.status != 200:
+                    logger.error(f"TMDB Details Failed: {detail_resp.status}")
+                    return None
+
+                details = await detail_resp.json()
+
+            poster_path = details.get("poster_path")
+            backdrop_path = details.get("backdrop_path")
+
+            poster_url = (
+                f"https://image.tmdb.org/t/p/w500{poster_path}"
+                if poster_path else None
+            )
+
+            backdrop_url = (
+                f"https://image.tmdb.org/t/p/original{backdrop_path}"
+                if backdrop_path else None
+            )
+
+            cast = []
+            directors = []
+            writers = []
+
+            for person in details.get("credits", {}).get("cast", [])[:10]:
+                cast.append(person.get("name"))
+
+            for crew in details.get("credits", {}).get("crew", []):
+
+                if crew.get("job") == "Director":
+                    directors.append(crew.get("name"))
+
+                if crew.get("job") in ["Writer", "Screenplay"]:
+                    writers.append(crew.get("name"))
+
+            return {
+                "title": details.get("title"),
+                "localized_title": details.get("original_title"),
+                "year": str(details.get("release_date", ""))[:4],
+                "release_date": details.get("release_date"),
+                "runtime": details.get("runtime"),
+                "rating": details.get("vote_average"),
+                "votes": details.get("vote_count"),
+                "plot": details.get("overview"),
+                "poster_url": poster_url,
+                "backdrop_url": backdrop_url,
+                "genres": [g["name"] for g in details.get("genres", [])],
+                "languages": [lang["english_name"] for lang in details.get("spoken_languages", [])],
+                "countries": [c["name"] for c in details.get("production_countries", [])],
+                "cast": cast,
+                "director": directors,
+                "writer": writers,
+                "tmdb_id": movie_id,
+                "tmdb_url": f"https://www.themoviedb.org/movie/{movie_id}",
+                "imdb_id": details.get("imdb_id"),
+                "certificates": [],
+                "producer": [],
+                "composer": [],
+                "cinematographer": [],
+                "distributors": [],
+                "box_office": None,
+                "tagline": details.get("tagline"),
+                "seasons": None
+            }
+
     except Exception as e:
-        logger.error(f"An error occurred in get_movie_detailsx: {e}")
+        logger.error(f"TMDB ERROR: {e}")
         return None
-
-    # Normalize fields
-    details = {}
-    details['title'] = data.get('title') or data.get('localized_title')
-    details['year'] = (data.get('year', 0)) if data.get('year') else None
-    details['release_date'] = data.get('release_date')
-    details['rating'] = round(float(data.get('rating', 0)), 1) if data.get('rating') is not None else None
-    details['votes'] = int(data.get('votes', 0))
-    details['runtime'] = data.get('runtime')
-    details['certificates'] = data.get('certificates')
-    details['tmdb_url'] = data.get('url')
-    
-    for key in ('genres', 'languages', 'countries'):
-        raw = data.get(key)
-        details[key] = [s.strip() for s in raw.split(',')] if raw else []
-    for role in ('director', 'writer', 'producer', 'composer', 'cinematographer', 'cast'):
-        raw = data.get(role)
-        details[role] = [s.strip() for s in raw.split(',')] if raw else []
-        
-    details['plot'] = data.get('plot')
-    details['tagline'] = data.get('tagline')
-    details['box_office'] = (data.get('box_office', 0)) if data.get('box_office') else None
-    raw_dist = data.get('distributors')
-    details['distributors'] = [d.strip() for d in raw_dist.split(',')] if raw_dist else []
-    details['imdb_id'] = data.get('imdb_id')
-    details['tmdb_id'] = data.get('tmdb_id')
-    
-    posters = data.get('images', {}).get('posters', {})
-    original_language = data.get('images', {}).get('original_language')
-    poster_url = data.get('poster_url')
-    if not poster_url:
-        for key in ('en', original_language, 'xx'):
-            if key and posters.get(key):
-                poster_url = posters[key][0]
-                break
-    details['poster_url'] = poster_url
-
-    backdrops = data.get('images', {}).get('backdrops', {})
-    original_language = data.get('images', {}).get('original_language')
-    backdrop_url = None
-    for key in ('en', original_language, 'xx'):
-        if key and backdrops.get(key):
-            backdrop_url = backdrops[key][0]
-            break
-    details['backdrop_url'] = backdrop_url
-
-    return details
 
