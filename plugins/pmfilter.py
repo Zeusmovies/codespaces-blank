@@ -2082,7 +2082,7 @@ async def advantage_spell_chok(client, message):
             [
                 InlineKeyboardButton(
                     text=btn_text,
-                    callback_data=f"spol#{title}#{user}"
+                    callback_data=f"spol#{movie.movieID}#{user}"
                 )
             ]
         )
