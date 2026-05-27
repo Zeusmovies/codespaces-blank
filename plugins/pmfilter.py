@@ -2068,7 +2068,7 @@ async def advantage_spell_chok(client, message):
             pass
         return
     user = message.from_user.id if message.from_user else 0
-     buttons = []
+    buttons = []
 
 for movie in movies[:5]:
 
