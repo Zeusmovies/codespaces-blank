@@ -2043,8 +2043,8 @@ async def advantage_spell_chok(client, message):
     query = query.strip() + " movie"
     try:
         movies = await get_poster(search, bulk=True)
-        if not movies:
-            return 
+    
+    
     
     except:
         k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
