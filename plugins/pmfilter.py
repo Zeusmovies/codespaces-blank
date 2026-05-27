@@ -2068,29 +2068,41 @@ async def advantage_spell_chok(client, message):
             pass
         return
     user = message.from_user.id if message.from_user else 0
+
     buttons = []
 
-for movie in movies[:5]:
+    for movie in movies[:5]:
 
-    title = movie.get('title')
-    year = movie.get('year', '')
+        title = movie.get('title')
+        year = movie.get('year', '')
 
-    btn_text = f"{title} ({year})"
+        btn_text = f"{title} ({year})"
 
-    buttons.append(
-        [
-            InlineKeyboardButton(
-                text=btn_text,
-                callback_data=f"spol#{title}#{user}"
-            )
-        ]
+        buttons.append(
+            [
+                InlineKeyboardButton(
+                    text=btn_text,
+                    callback_data=f"spol#{title}#{user}"
+                )
+            ]
+        )
+
+    buttons.append([
+        InlineKeyboardButton(
+            text="❌ CLOSE ❌",
+            callback_data='close_data'
+        )
+    ])
+
+    d = await message.reply_text(
+        text=script.CUDNT_FND.format(message.from_user.mention),
+        reply_markup=InlineKeyboardMarkup(buttons),
+        reply_to_message_id=message.id
     )
 
-    buttons.append([InlineKeyboardButton(
-        text="🚫 ᴄʟᴏsᴇ 🚫", callback_data='close_data')])
-    d = await message.reply_text(text=script.CUDNT_FND.format(message.from_user.mention), reply_markup=InlineKeyboardMarkup(buttons), reply_to_message_id=message.id)
     await asyncio.sleep(60)
     await d.delete()
+
     try:
         await message.delete()
     except:
