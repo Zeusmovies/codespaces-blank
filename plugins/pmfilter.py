@@ -2043,6 +2043,9 @@ async def advantage_spell_chok(client, message):
     query = query.strip() + " movie"
     try:
         movies = await get_poster(search, bulk=True)
+        if not movies:
+            return 
+    
     except:
         k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
         await asyncio.sleep(60)
@@ -2065,9 +2068,23 @@ async def advantage_spell_chok(client, message):
             pass
         return
     user = message.from_user.id if message.from_user else 0
-    buttons = [
-        [InlineKeyboardButton(text=movie.get('title'), callback_data=f"spol#{movie.movieID}#{user}")
-         ] for movie in movies]
+     buttons = []
+
+for movie in movies[:5]:
+
+    title = movie.get('title')
+    year = movie.get('year', '')
+
+    btn_text = f"{title} ({year})"
+
+    buttons.append(
+        [
+            InlineKeyboardButton(
+                text=btn_text,
+                callback_data=f"spol#{title}#{user}"
+            )
+        ]
+    )
 
     buttons.append([InlineKeyboardButton(
         text="🚫 ᴄʟᴏsᴇ 🚫", callback_data='close_data')])
