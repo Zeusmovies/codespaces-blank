@@ -2041,7 +2041,7 @@ async def advantage_spell_chok(client, message):
         r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
         "", message.text, flags=re.IGNORECASE)
     query = query.strip() + " movie"
-    try:
+try:
     movies = await get_poster(search, bulk=True)
 
     if not movies:
@@ -2060,7 +2060,7 @@ except:
     except:
         pass
 
-    return
+        return
     if not movies:
         google = search.replace(" ", "+")
         button = [[InlineKeyboardButton(
