@@ -2041,26 +2041,27 @@ async def advantage_spell_chok(client, message):
         r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
         "", message.text, flags=re.IGNORECASE)
     query = query.strip() + " movie"
-try:
-        movies = await get_poster(search, bulk=True)
+        try:
+            movies = await get_poster(search, bulk=True)
+            
+            if not movies:
+                suggestion = await ai_spell_check(chat_id, search)
 
-        if not movies:
-            suggestion = await ai_spell_check(chat_id, search)
+                if suggestion:
+                    movies = await get_poster(suggestion, bulk=True)
 
-            if suggestion:
-                movies = await get_poster(suggestion, bulk=True)
+       except:
+           k = await
+   message.reply(script.I_CUDNT.format(message.from_user.mention))
+           await asyncio.sleep(60)
+           await k.delete()
 
-except:
-    k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
-    await asyncio.sleep(60)
-    await k.delete()
+           try:
+               await message.delete()
+           except:
+               pass
 
-    try:
-        await message.delete()
-    except:
-        pass
-
-        return
+           return
     if not movies:
         google = search.replace(" ", "+")
         
