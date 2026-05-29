@@ -2042,13 +2042,13 @@ async def advantage_spell_chok(client, message):
         "", message.text, flags=re.IGNORECASE)
     query = query.strip() + " movie"
 try:
-    movies = await get_poster(search, bulk=True)
+        movies = await get_poster(search, bulk=True)
 
-    if not movies:
-        suggestion = await ai_spell_check(chat_id, search)
+        if not movies:
+            suggestion = await ai_spell_check(chat_id, search)
 
-        if suggestion:
-            movies = await get_poster(suggestion, bulk=True)
+            if suggestion:
+                movies = await get_poster(suggestion, bulk=True)
 
 except:
     k = await message.reply(script.I_CUDNT.format(message.from_user.mention))
@@ -2065,18 +2065,18 @@ except:
         google = search.replace(" ", "+")
 
 try:
-    await client.send_message(
-        -1001497551448,
-        f"🚫 MISSING MOVIE REQUEST\n\n"
-        f"🎬 Movie: {search}\n"
-        f"👤 User: {message.from_user.first_name}\n"
-        f"🆔 User ID: {message.from_user.id}\n"
-        f"💬 Chat ID: {message.chat.id}"
-    )
-except Exception as e:
-    print(e)
-
-    button = [[InlineKeyboardButton(
+        await client.send_message(
+            -1001497551448,
+            f"🚫 MISSING MOVIE REQUEST\n\n"
+            f"🎬 Movie: {search}\n"
+            f"👤 User: {message.from_user.first_name}\n"
+            f"🆔 User ID: {message.from_user.id}\n"
+            f"💬 Chat ID: {message.chat.id}"
+        )
+    except Exception as e:
+        print(e)
+        
+        button = [[InlineKeyboardButton(
         "🔍 CHECK SPELLING ON GOOGLE 🔍",
         url=f"https://www.google.com/search?q={google}"
     )]]
