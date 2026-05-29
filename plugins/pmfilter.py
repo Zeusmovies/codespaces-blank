@@ -2064,7 +2064,7 @@ except:
     if not movies:
         google = search.replace(" ", "+")
 
-    try:
+try:
     await client.send_message(
         -1001497551448,
         f"🚫 MISSING MOVIE REQUEST\n\n"
