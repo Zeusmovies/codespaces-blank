@@ -2042,27 +2042,27 @@ async def advantage_spell_chok(client, message):
         "", message.text, flags=re.IGNORECASE)
     query = query.strip() + " movie"
 try:
-        movies = await get_poster(search, bulk=True)
+    movies = await get_poster(search, bulk=True)
 
-        if not movies:
-            suggestion = await ai_spell_check(chat_id, search)
+    if not movies:
+        suggestion = await ai_spell_check(chat_id, search)
 
-            if suggestion:
-                movies = await get_poster(suggestion, bulk=True)
+        if suggestion:
+            movies = await get_poster(suggestion, bulk=True)
 
-    except Exception:
-        k = await message.reply(
-            script.I_CUDNT.format(message.from_user.mention)
-        )
-        await asyncio.sleep(60)
-        await k.delete()
+except Exception:
+    k = await message.reply(
+        script.I_CUDNT.format(message.from_user.mention)
+    )
+    await asyncio.sleep(60)
+    await k.delete()
 
-        try:
-            await message.delete()
-        except Exception:
-            pass
+    try:
+        await message.delete()
+    except:
+        pass
 
-        return
+    return
                pass
 
            return
