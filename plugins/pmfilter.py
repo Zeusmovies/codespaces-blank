@@ -2099,13 +2099,9 @@ except Exception:
     except:
         pass
 
+
     return
 
-    try:
-        await message.delete()
-    except:
-        pass
-        return
     user = message.from_user.id if message.from_user else 0
 
     buttons = []
