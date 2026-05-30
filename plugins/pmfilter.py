@@ -2063,9 +2063,6 @@ except Exception:
         pass
 
     return
-               pass
-
-           return
     if not movies:
         google = search.replace(" ", "+")
         
