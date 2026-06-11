@@ -2073,17 +2073,17 @@ async def advantage_spell_chok(client, message):
     if not movies:
         google = search.replace(" ", "+")
         
-     #   try:
-     #       await client.send_message(
-     #           -1001497551448,
-     #           f"🚫 MISSING MOVIE REQUEST\n\n"
-     #           f"🎬 Movie: {search}\n"
-      #          f"👤 User: {message.from_user.first_name}\n"
-       #         f"🆔 User ID: {message.from_user.id}\n"
-        #        f"💬 Chat ID: {message.chat.id}"
-     #      )
-      #  except Exception as e:
-      #     print(e)
+        try:
+            await client.send_message(
+                -1001497551448,
+                f"🚫 MISSING MOVIE REQUEST\n\n"
+                f"🎬 Movie: {search}\n"
+                f"👤 User: {message.from_user.first_name}\n"
+                f"🆔 User ID: {message.from_user.id}\n"
+                f"💬 Chat ID: {message.chat.id}"
+           )
+        except Exception as e:
+           print(e)
         
         button = [[InlineKeyboardButton(
             "🔍 CHECK SPELLING ON GOOGLE 🔍",
