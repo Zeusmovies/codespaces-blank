@@ -1974,7 +1974,7 @@ async def auto_filter(client, msg, spoll=False):
         try:
             if imdb and imdb.get('poster'):
                 try:
-                    if TMDB_POSTERS:
+                    if TMDB_POSTER:
                         photo = imdb.get('backdrop') if imdb.get('backdrop') and LANDSCAPE_POSTER else imdb.get('poster')
                     else:
                         photo = imdb.get('poster')
