@@ -2019,6 +2019,8 @@ async def ai_spell_check(chat_id, wrong_name):
         movie_list = [movie['title'] for movie in search_results]
         return movie_list
     movie_list = await search_movie(wrong_name)
+    print("SPELL INPUT:", wrong_name)
+    print("MOVIE LIST:", movie_list)
     if not movie_list:
         return
     for _ in range(5):
