@@ -250,12 +250,13 @@ async def get_bad_files(query, file_type=None):
         filter = {'file_name': regex}
     if file_type:
         filter['file_type'] = file_type
-    cursor1 = Media.find(filter).sort('$natural', -1)
+    cursor1 = Media.find(filter).sort('file_size', 1)
     files1 = await cursor1.to_list(length=(await Media.count_documents(filter)))
     if MULTIPLE_DB:
-        cursor2 = Media2.find(filter).sort('$natural', -1)
+        cursor2 = Media2.find(filter).sort('file_size', 1)
         files2 = await cursor2.to_list(length=(await Media2.count_documents(filter)))
         files = files1 + files2
+        files = sorted(files, key=lambda x: x.file_size)
     else:
         files = files1
     total_results = len(files)
