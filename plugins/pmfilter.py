@@ -2028,8 +2028,10 @@ async def ai_spell_check(chat_id, wrong_name):
         if not closest_match or closest_match[1] <= 80:
             return
         movie = closest_match[0]
+        print("BEST MATCH:", movie)
         files, _, _ = await get_search_results(chat_id=chat_id, query=movie)
         if files:
+            print("FOUND IN DB:", movie)
             return movie
         movie_list.remove(movie)
 
